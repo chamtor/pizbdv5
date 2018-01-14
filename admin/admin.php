@@ -13,17 +13,17 @@ session_start();
         </head>
         <body>
             <p1>Witaj adminie!</p>
-            <p><a href="logout.php">Logout</a></p>
-            <form method="post">
-                <input type='submit' name='przycisk' value="Dodaj nowy produkt"><br>
-                <input type="submit" name="przycisk" value="Przeglądaj zamówienie klientów"><br>
-                <input type="submit" name="przycisk" value="Usuń produkt."><br>
+                <p><a href="logout.php">Logout</a></p>
+                <form method="post">
+                    <input type='submit' name='przycisk' value="Dodaj nowy produkt"><br>
+                    <input type="submit" name="przycisk" value="Przeglądaj zamówienie klientów"><br>
+                    <input type="submit" name="przycisk" value="Usuń lub edytuj produkt."><br>
 
-            </form>
+                </form>
 
 
 
-            <?php
+                <?php
     if(isset($_POST['przycisk'])){        														//jeśli wciśnięto przycisk
         echo "<form method='post'>";
         switch($_POST['przycisk']){
@@ -44,17 +44,16 @@ session_start();
             </select>
             
             <?php
-          /*  echo "<p>Kategoria:";
+        /*  
+            echo "<p>Kategoria:";
             echo "<select name='produkt>";
             echo "<option value='1'>Czapki</option>";
             echo "<option value='2'>Rękawiczki</option>";
             echo " </select>";
-            */
-
+        */
             echo "<p>Produkt: </p><input type='text' name='prod' maxlength='40' required>";
-            echo "<p>Ilość: </p><input type='int' name='ilosc' maxlength='40' required>";
-            echo "<p>Cena za sztuke: </p><input type='double' name='cena' maxlength='40' required>";
-
+            echo "<p>Ilość: </p><input type='number' name='ilosc' maxlength='40' required>";
+            echo "<p>Cena za sztuke: </p><input type='number' step='0.01' name='cena' maxlength='40' required>"."<br>";
             echo "<input type='submit' name='dodaj' value='Dodaj'>";
             echo "</form>";
             break;
@@ -62,7 +61,6 @@ session_start();
         case "Przeglądaj zamówienie klientów":{												//natomiast jeśli wciśnięto "dodaj nowego szkoleniowca" to
             echo "<p>Przeglądaj zamówienie klientów</p>";											//komunikat
 
-           // $adress = mysqli_query($link, "SELECT adres FROM klient WHERE ");
             $result = mysqli_query($link, "SELECT * FROM zamowienia");
             print "<TABLE CELLPADDING=5 BORDER=1>";
             print "<TR><TD>ID</TD><TD>Zamawiający</TD><TD>adres</TD><TD>Zamowienie</TD><TD>Ilosc</TD></TR>\n";
@@ -72,7 +70,7 @@ session_start();
                 $id = $wiersz['id'];
                 $login = $wiersz['login'];
                 //$adres = $wiersz['adres'];
-                $produkt = $wiersz['produkt'];
+                $produkt = $wiersz['produkt']; 
                 $ilosc = $wiersz['ilosc'];
 
                 $adress = mysqli_query($link, "SELECT adres FROM klient WHERE login=$login");
@@ -85,8 +83,8 @@ session_start();
         }
 
         
-        case "Usuń produkt.":{
-           echo "<p>Usuń produkt</p>";
+        case "Usuń lub edytuj produkt.":{
+       /*    echo "<p>Usuń produkt</p>";
 
            $result = mysqli_query($link, "SELECT * FROM klient");
            print "<TABLE CELLPADDING=5 BORDER=1>";
@@ -104,13 +102,28 @@ session_start();
             print "<TR><TD>$id</TD><TD>$login</TD><TD>$adres</TD><TD>$usubProdukt</TD><TD?$ilosc</TD></TR>\n";   
         } 
         print "</TABLE>" ;
+*/
 
 
+        echo "<p>Który produkt chcesz usunąć?</p>";
 
-        break;
+        $ktoryDoUsuniecia = mysqli_query($link, "SELECT * FROM produkty ORDER BY nazwa");
+
+        while ($wiersz = mysqli_fetch_array($ktoryDoUsuniecia))
+        {
+
+            echo "<form method='post'>";
+            $id = $wiersz['nazwa'];
+           // echo "<form method='post'>";
+            //echo "<input type= 'checkbox' value='chebkBoxUsunProdukt'>".$id."</option>";
+            echo "<input type='submit' name='sUsun' value='$id'>";
+            echo "</form>";
+        }
     }
+    break;
 }
 }
+
 
 
 
@@ -135,27 +148,35 @@ session_start();
             $cen = $_POST['cena'];
             $kat = $_POST['produkt'];
 
-
             $zap = "SELECT * FROM produkty WHERE nazwa='$pr'";
             $wynik = mysqli_query($link, $zap);		
+            $row_cnt = mysqli_num_rows($wynik);
 
-            if($wynik){																			
-                echo "<p>Udało się dodać produkt!</p>";
-                $zap = "INSERT INTO produkty (nazwa,ilosc,cena,Kategoria) VALUES('$pr','$il','$cen','$kat')";
-                $wynik = mysqli_query($link, $zap);     
-            }
-            else{
+            if($row_cnt > 0){																			
+               echo "<p>Produkt juz istnieje - zaktualizowana ilość.</p>";
+               $zap = "UPDATE produkty SET ilosc = ilosc + '$il' WHERE nazwa = '$pr'";
+               $wynik = mysqli_query($link, $zap);
+           }
+           else{
 
-                echo "<p>Produkt juz istnieje - zaktualizowana ilość.</p>";
-                $zap = "UPDATE produkty SET ilosc = ilosc + '$il' WHERE nazwa = '$pr'";
-                $wynik = mysqli_query($link, $zap);
+             echo "<p>Udało się dodać produkt!</p>";
+             $zap = "INSERT INTO produkty (nazwa,ilosc,cena,Kategoria) VALUES('$pr','$il','$cen','$kat')";
+             $wynik = mysqli_query($link, $zap); 
 
-            } 
-            mysqli_close($link);
-        }
+         } 
+         mysqli_close($link);
+     }
+ }
+
+ if(isset($_POST['sUsun'])){
+  if($link != null){ 
+
+    $produkt = $_POST['sUsun'];
+    $ktoryDoUsuniecia = mysqli_query($link, "DELETE FROM produkty WHERE nazwa='$produkt'");
+
+  //  echo "Produkt ".$produkt." został usunięty.";
     }
-
-
+}
      /*   $result = mysqli_query($link, "SELECT * FROM klient");
 
         while ($wiersz = mysqli_fetch_array($result))
@@ -166,16 +187,15 @@ session_start();
             echo "login:  ".$login."<br>";
             echo "Adres:  ".$adres."<br>";
         }*/
-
         ?>      
     </body>
     </html>
 
     <?php
 }else{
-   echo "Nie jesteś zalogowany!!";
-   echo "<br/>";
-   echo "<a href='http://www.lukasz-zdunowski.com.pl/pizbd/''>Powrót na główną strone.</a>";
+ echo "Nie jesteś zalogowany!!";
+ echo "<br/>";
+ echo "<a href='http://www.lukasz-zdunowski.com.pl/pizbd/''>Powrót na główną strone.</a>";
 
 }
 ?>
