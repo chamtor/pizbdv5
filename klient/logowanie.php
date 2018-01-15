@@ -46,7 +46,7 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
     Nazwisko: <br/> <input type="text" name="nazwisko" required="text"> <br/>
     e-mail: <br/> <input type="email" name="mail" required > <br/>
     Login:<br/> <input type="text" name="login" required> <br/>
-    Hasło: <br/> <input type="password" id='pass1' name="pas1s" required name=up> <br/>
+    Hasło: <br/> <input type="password" id='pass1' name="pass1" required name=up> <br/>
     Powtórz hasło: <br/> <input type="password" id='pass2' required="pass1"> <br/> 
     Adres: <br/> <input type="text" id='adres' name='adres' required> <br/> 
 

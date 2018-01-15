@@ -25,7 +25,6 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
           'ilosc'=>$_POST["ilosc"], 
           'cena'=>$productByCode[0]["cena"]));
 
-
         if(!empty($_SESSION["cart_item"])) {
           if(in_array($productByCode[0]["code"],array_keys($_SESSION["cart_item"]))) {
             foreach($_SESSION["cart_item"] as $k => $v) {
@@ -43,7 +42,6 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
           $_SESSION["cart_item"] = $itemArray;
         }
       }
-
       break;
 
       case "remove":
@@ -60,27 +58,17 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
       unset($_SESSION["cart_item"]);
       break;
 
-
       case "zatwierdzZakup":
       $iNaz = $item["nazwa"];
       $iCod = $item["code"];
       $iIlo = $item["ilosc"];
       $iCen = $item["cena"];
 
-     // $zamowienieDoBazy = mysqli_query($link, "INSERT INTO zamowienia (login, ilosc, produkt, cena) VALUES ('$user','$iIlo', '$iNaz','$iCen')") or die("blad zapytania");
-
       $adasdqwe132 = mysqli_query($link, "INSERT INTO zamowienia (produkt) VALUES ('$iNaz')") or die("blad zapytania");
-
       unset($_SESSION["cart_item"]);
 
-      
     }
   }
-
-
-
-
-
   ?>
 
 
@@ -105,95 +93,12 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
       echo "<p>Witaj: "." ".$_SESSION['uzytkownik']."!";
     }
 
-  //  $q123 =  $_SESSION["cart_item"];
-   // echo reser($q123);
     ?> 
     <br>
     <form method="post">
       <input type='submit' name='przycisk' value="Przegladaj produkty"><br>
       <input type='submit' name='przycisk' value="Status zamówienia."><br>
     </form>
-
-
-    <?php
-     /* if(isset($_POST['przycisk'])){            													//jeśli wciśnięto przycisk
-        echo "<form method='post'>";
-        switch($_POST['przycisk']){
-
-
-          case "Przegladaj produkty":{												//natomiast jeśli wciśnięto "dodaj nowego szkoleniowca" to
-              echo "<p>Produkty w magazynie:</p>";											//komunikat
-
-
-              $result = mysqli_query($link, "SELECT * FROM produkty");
-              print "<TABLE CELLPADDING=5 BORDER=1>";
-              print "<TR><TD>Kategoria</TD><TD>Nazwa</TD><TD>Cena</TD><TD>Ilość</TD></TR>\n";
-
-              while ($wiersz = mysqli_fetch_array($result))
-              {
-
-              //echo "<form method='post'>";
-
-                $kat = $wiersz['kategoria'];
-                $naz = $wiersz['nazwa'];
-                $cen = $wiersz['cena'];
-
-                $ile = "<input type='number' name='ileKupic' min='0' max='10' value='0'> ";
-              //  $qwe = "<input type='submit' name='kup' value='Kup'>";
-               // echo "</form>";
-
-                print "<TR><TD>$kat</TD><TD>$naz</TD><TD>$cen</TD><TD>$ile</TD><TD>$qwe</TD></TR>\n";
-
-              } 
-              print "</TABLE>" ;
-
-              echo "<input type='submit' name='kup' value='Kup'>";
-              echo "</form>";
-              break;
-            }
-
-            case "Status zamówienia.":{    											//natomiast jeśli wciśnięto "dodaj nowego szkoleniowca" to
-              echo "<p>Status Twojego zamówienia:</p>";					//komunikat
-              $user = $_SESSION['uzytkownik'];
-
-              $result = mysqli_query($link, "SELECT * FROM zamowienia WHERE login ='$user' ");
-              print "<TABLE CELLPADDING=5 BORDER=1>";
-              print "<TR><TD>Kategoria</TD><TD>Nazwa</TD><TD>Ilość</TD><TD>Cena</TD></TR>\n";
-
-              while ($wiersz = mysqli_fetch_array($result))
-              {
-                $kat = $wiersz['kategoria'];
-                $naz = $wiersz['nazwa'];
-                $qty = $wiersz['ilosc'];
-                $cen = $wiersz['cena'];
-
-                print "<TR><TD>$kat</TD><TD>$naz</TD><TD>$qty</TD><TD>$cen</TD></TR>\n";   
-              } 
-              print "</TABLE>" ;
-              break;
-            }
-          }
-        }
-
-
-        if(isset($_POST['kup'])){
-          if($link != null){ 
-
-            //$produkt = $_POST['kup'];
-            $ile = $_POST['ileKupic'];
-
-            //$ktoryDoUsuniecia = mysqli_query($link, "UPDATE produkty  SET ilosc = ilosc -'$ile' WHERE nazwa='$produkt'");
-
-            echo "Zakupione";
-            echo "<br>";
-            echo "$ile";
-
-          }
-        }
-        $user= $_SESSION['uzytkownik'];
-  */
-
-        ?>
 
 
         <div id="shopping-cart">
@@ -211,9 +116,12 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
                   <th style="text-align:right;"><strong>Cena</strong></th>
                   <th style="text-align:center;"><strong>Usuń</strong></th>
                 </tr> 
+
                 <?php   
                 foreach ($_SESSION["cart_item"] as $item){
                   ?>
+                 <form method="post" action="logged.php?action=zatwierdzZakup">
+
                   <tr>
                     <td style="text-align:left;border-bottom:#F0F0F0 1px solid;"><strong><?php echo $item["nazwa"]; ?></strong></td>
                     <td style="text-align:left;border-bottom:#F0F0F0 1px solid;"><?php echo $item["code"]; ?></td>
@@ -221,10 +129,12 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
                     <td style="text-align:right;border-bottom:#F0F0F0 1px solid;"><?php echo $item["cena"]." "."zł"; ?></td>
                     <td style="text-align:center;border-bottom:#F0F0F0 1px solid;"><a href="logged.php?action=remove&code=<?php echo $item["code"]; ?>" class="btnRemoveAction">Usuń produkt</a></td>
                   </tr>
+
                   <?php
                   $item_total += ($item["cena"]*$item["ilosc"]);
                 }
                 ?>
+
 
                 <tr>
                   <td colspan="5" align=right><strong>Total:</strong> <?php echo $item_total."zł"; ?></td>
@@ -235,10 +145,9 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
 
               </tbody>
             </table>    
-
-            <form method="post" action="logged.php?action=zatwierdzZakup">
-              <input type='submit' name='zatwZakup' value='Kupuje'>
+             <input type='submit' name='zatwZakup' value='Kupuje'>
             </form>
+              
             <?php
           }
           ?>
@@ -264,18 +173,12 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
             ?>
           </div>
 
-
           <?php
-
-
-
           echo $user;
           echo $item["nazwa"];
           echo $item["code"];
           echo $item["ilosc"];
           echo $item["cena"];
-
-
           ?>
 
         </table>
