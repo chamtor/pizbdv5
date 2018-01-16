@@ -4,6 +4,8 @@ session_start();
 $login = $_POST['login'];
 $pass = $_POST['pass1'];
 $adres = $_POST['adres'];
+$imie = $_POST['imie'];
+$nazwisko = $_POST['nazwisko'];
 
 $wiadomosc = "Welcome new user !";
 
@@ -20,11 +22,10 @@ $rekord = mysqli_fetch_array($rezultat);
 
 if($rekord['login'] == $login){
 	$_SESSION['zle'] = '<span style="color:red">Użytkownik o takim loginie już istnieje.</span>';
-	
 	header('Location: logowanie.php');
-
-	}else{
-	$doBazy =  mysqli_query($link, "INSERT INTO klient (login,haslo,adres) VALUES('$login','$pass','$adres') ") or die(mysqli_error($link));
+	}
+	else{
+	$doBazy =  mysqli_query($link, "INSERT INTO klient (login,haslo,adres, imie, nazwisko) VALUES('$login','$pass','$adres', '$imie','$nazwisko') ") or die(mysqli_error($link));
     
     $Logi =  mysqli_query($link, "INSERT INTO logi (login) VALUES('$login') ") or die(mysqli_error($link));
 

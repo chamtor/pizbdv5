@@ -43,9 +43,9 @@ if(isset($_SESSION['loggedAdmin'])){
 				<p> Kategoria:</p>
 				<select name="produkt">
 				<option value="Napoje" size="40" >Napoje</option>
-				<option value="Nabiał" size="40" >Nabiał</option>
-				<option value="Jedzenie" size="40" >Jedzenie</option>
-				<option value="asd" size="40" >asd</option>
+				<option value="Słodycze" size="40" >Słodycze</option>
+				<option value="Słone przekąski" size="40" >Słone przekąski</option>
+				<option value="Inne" size="40" >Inne</option>
 				</select>
 	
 				<?php
@@ -157,14 +157,6 @@ END;
 ?>
 <br/>
 <br/>
-<!--<p>Produkt: </p><input type="text" name="login" maxlength="40" required>
-<p>Ilość: </p><input type="int" name="haslo" maxlength="40" required>
-<p>Imię: </p><input type="text" name="imie" maxlength="40" >
-<p>Nazwisko: </p><input type="text" name="nazwisko" maxlength="40" ><br>
-<input type="submit" name="dodaj" value="Dodaj">
-</form>
--->
-
 <br/>
 <br/>
 <?php

@@ -8,9 +8,12 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
   if(!$link) { echo"Błąd: ". mysqli_connect_errno()." ".mysqli_connect_error(); 
   } // obsługa błędu połączenia z BD
   mysqli_query($link, "SET NAMES 'utf8'"); // ustawienie polskich znaków
-  $user= $_SESSION['uzytkownik'];
-
-
+/*  $user= $_SESSION['uzytkownik'];
+  $iNaz = $item["nazwa"];
+  $iCod = $item["code"];
+  $iIlo = $item["ilosc"];
+  $iCen = $item["cena"];
+*/
 
   require_once("dbcontroller.php");
   $db_handle = new DBController();
@@ -41,7 +44,9 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
         } else {
           $_SESSION["cart_item"] = $itemArray;
         }
-      }
+
+      }        //$zakupDoBazy = mysqli_query($link, "INSERT INTO zamowienia (produkt, ilosc, cena) VALUES ('$iNaz', '$iIlo', '$iCen')") or die("blad zapytania");
+
       break;
 
       case "remove":
@@ -57,16 +62,11 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
       case "empty":
       unset($_SESSION["cart_item"]);
       break;
-
+/*
       case "zatwierdzZakup":
-      $iNaz = $item["nazwa"];
-      $iCod = $item["code"];
-      $iIlo = $item["ilosc"];
-      $iCen = $item["cena"];
-
       $adasdqwe132 = mysqli_query($link, "INSERT INTO zamowienia (produkt) VALUES ('$iNaz')") or die("blad zapytania");
       unset($_SESSION["cart_item"]);
-
+*/
     }
   }
   ?>
@@ -101,84 +101,97 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
     </form>
 
 
-        <div id="shopping-cart">
-          <div class="txt-heading">Shopping Cart <a id="btnEmpty" href="logged.php?action=empty">Empty Cart</a></div>
-          <?php
-          if(isset($_SESSION["cart_item"])){
-            $item_total = 0;
-            ?>  
-            <table cellpadding="10" cellspacing="1">
-              <tbody>
-                <tr>
-                  <th style="text-align:left;"><strong>Nazwa</strong></th>
-                  <th style="text-align:left;"><strong>Kod</strong></th>
-                  <th style="text-align:right;"><strong>Ilosc</strong></th>
-                  <th style="text-align:right;"><strong>Cena</strong></th>
-                  <th style="text-align:center;"><strong>Usuń</strong></th>
-                </tr> 
+    <div id="shopping-cart">
+      <div class="txt-heading">Shopping Cart <a id="btnEmpty" href="logged.php?action=empty">Empty Cart</a></div>
+      <?php
+      if(isset($_SESSION["cart_item"])){
+        $item_total = 0;
+        ?>  
+        <table cellpadding="10" cellspacing="1">
+          <tbody>
+            <tr>
+              <th style="text-align:left;"><strong>Nazwa</strong></th>
+              <th style="text-align:right;"><strong>Ilosc</strong></th>
+              <th style="text-align:right;"><strong>Cena</strong></th>
+              <th style="text-align:center;"><strong>Usuń</strong></th>
+            </tr> 
 
-                <?php   
-                foreach ($_SESSION["cart_item"] as $item){
-                  ?>
-                 <form method="post" action="logged.php?action=zatwierdzZakup">
-
-                  <tr>
-                    <td style="text-align:left;border-bottom:#F0F0F0 1px solid;"><strong><?php echo $item["nazwa"]; ?></strong></td>
-                    <td style="text-align:left;border-bottom:#F0F0F0 1px solid;"><?php echo $item["code"]; ?></td>
-                    <td style="text-align:right;border-bottom:#F0F0F0 1px solid;"><?php echo $item["ilosc"]; ?></td>
-                    <td style="text-align:right;border-bottom:#F0F0F0 1px solid;"><?php echo $item["cena"]." "."zł"; ?></td>
-                    <td style="text-align:center;border-bottom:#F0F0F0 1px solid;"><a href="logged.php?action=remove&code=<?php echo $item["code"]; ?>" class="btnRemoveAction">Usuń produkt</a></td>
-                  </tr>
-
-                  <?php
-                  $item_total += ($item["cena"]*$item["ilosc"]);
-                }
-                ?>
-
+            <?php   
+            foreach ($_SESSION["cart_item"] as $item){
+              ?>
+              <form method="post" action="logged.php?action=zatwierdzZakup">
 
                 <tr>
-                  <td colspan="5" align=right><strong>Total:</strong> <?php echo $item_total."zł"; ?></td>
+                  <td style="text-align:left;border-bottom:#F0F0F0 1px solid;"><strong><?php echo $item["nazwa"]; ?></strong></td>
+                  <td style="text-align:right;border-bottom:#F0F0F0 1px solid;"><?php echo $item["ilosc"]; ?></td>
+                  <td style="text-align:right;border-bottom:#F0F0F0 1px solid;"><?php echo $item["cena"]." "."zł"; ?></td>
+                  <td style="text-align:center;border-bottom:#F0F0F0 1px solid;"><a href="logged.php?action=remove&code=<?php echo $item["code"]; ?>" class="btnRemoveAction">Usuń produkt</a></td>
                 </tr>
 
+                <?php
+                $item_total += ($item["cena"]*$item["ilosc"]);
+              }
+              ?>
+
+
+              <tr>
+                <td colspan="5" align=right><strong>Total:</strong> <?php echo $item_total."zł"; ?></td>
+              </tr>
 
 
 
-              </tbody>
-            </table>    
-             <input type='submit' name='zatwZakup' value='Kupuje'>
-            </form>
-              
+
+            </tbody>
+          </table>    
+          <input type='submit' name='zatwZakup' value='Kupuje'>
+        </form>
+
+        <?php
+      }
+      ?>
+    </div>
+    <div id="product-grid">
+      <div class="txt-heading">Produkty</div>
+      <?php
+      $product_array = $db_handle->runQuery("SELECT * FROM produkty ORDER BY nazwa ASC");
+      if (!empty($product_array)) { 
+        foreach($product_array as $key=>$value){
+          ?>
+          <div class="product-item">
+            <form method="post" action="logged.php?action=add&code=<?php echo $product_array[$key]["code"]; ?>">
+              <div><strong><?php echo $product_array[$key]["nazwa"]; ?></strong></div>
+              <div class="product-price"><?php echo $product_array[$key]["cena"]."zł"; ?></div>
+              <div><input type="text" name="ilosc" value="0" size="2" />
+                <input type="submit" value="Add" class="btnAddAction" /></div>
+              </form>
+            </div>
             <?php
           }
-          ?>
-        </div>
-        <div id="product-grid">
-          <div class="txt-heading">Produkty</div>
-          <?php
-          $product_array = $db_handle->runQuery("SELECT * FROM produkty ORDER BY nazwa ASC");
-          if (!empty($product_array)) { 
-            foreach($product_array as $key=>$value){
-              ?>
-              <div class="product-item">
-                <form method="post" action="logged.php?action=add&code=<?php echo $product_array[$key]["code"]; ?>">
-                  <div><strong><?php echo $product_array[$key]["nazwa"]; ?></strong></div>
-                  <div class="product-price"><?php echo $product_array[$key]["cena"]."zł"; ?></div>
-                  <div><input type="text" name="ilosc" value="0" size="2" />
-                    <input type="submit" value="Add" class="btnAddAction" /></div>
-                  </form>
-                </div>
-                <?php
-              }
-            }
-            ?>
-          </div>
+        }
+        ?>
+      </div>
 
-          <?php
-          echo $user;
-          echo $item["nazwa"];
-          echo $item["code"];
-          echo $item["ilosc"];
-          echo $item["cena"];
+      <?php
+/*      echo $user;
+      echo $item["nazwa"];
+      echo $item["code"];
+      echo $item["ilosc"];
+      echo $item["cena"];
+*/
+
+
+          if(isset($_POST['zatwZakup'])){                                    //jeśli wciśnięto przycisk
+            echo "<form method='post'>";
+            switch($_POST['zatwZakup']){
+
+              case "Kupuje":
+
+              $adasdqwe132 = mysqli_query($link, "INSERT INTO zamowienia (produkt) VALUES ('$iNaz')") or die("blad zapytania");
+              unset($_SESSION["cart_item"]);
+
+              break;
+            }
+          }
           ?>
 
         </table>
