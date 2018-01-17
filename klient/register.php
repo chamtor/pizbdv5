@@ -7,7 +7,10 @@ $adres = $_POST['adres'];
 $imie = $_POST['imie'];
 $nazwisko = $_POST['nazwisko'];
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 
 >>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 $wiadomosc = "Welcome new user !";
@@ -21,9 +24,12 @@ if($rekord['login'] == $login){
 	$_SESSION['zle'] = '<span style="color:red">Użytkownik o takim loginie już istnieje.</span>';
 	header('Location: logowanie.php');
 <<<<<<< HEAD
+<<<<<<< HEAD
 	}else{
 	$doBazy =  mysqli_query($link, "INSERT INTO klient (login,haslo,adres,imie,nazwisko) VALUES('$login','$pass','$adres','$imie','$nazwisko') ") or die(mysqli_error($link));
 =======
+=======
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 	}
 	else{
 	$doBazy =  mysqli_query($link, "INSERT INTO klient (login,haslo,adres, imie, nazwisko) VALUES('$login','$pass','$adres', '$imie','$nazwisko') ") or die(mysqli_error($link));

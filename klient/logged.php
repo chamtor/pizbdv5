@@ -9,7 +9,11 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
   } // obsługa błędu połączenia z BD
   mysqli_query($link, "SET NAMES 'utf8'"); // ustawienie polskich znaków
 <<<<<<< HEAD
+<<<<<<< HEAD
   $user= $_SESSION['uzytkownik'];
+=======
+/*  $user= $_SESSION['uzytkownik'];
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 =======
 /*  $user= $_SESSION['uzytkownik'];
 >>>>>>> 27bff1281bed071dc823835e52727332be6c286c
@@ -18,7 +22,11 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
   $iIlo = $item["ilosc"];
   $iCen = $item["cena"];
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+*/
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 =======
 */
 >>>>>>> 27bff1281bed071dc823835e52727332be6c286c
@@ -54,7 +62,11 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       }
+=======
+      }        //$zakupDoBazy = mysqli_query($link, "INSERT INTO zamowienia (produkt, ilosc, cena) VALUES ('$iNaz', '$iIlo', '$iCen')") or die("blad zapytania");
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 =======
       }        //$zakupDoBazy = mysqli_query($link, "INSERT INTO zamowienia (produkt, ilosc, cena) VALUES ('$iNaz', '$iIlo', '$iCen')") or die("blad zapytania");
 >>>>>>> 27bff1281bed071dc823835e52727332be6c286c
@@ -76,8 +88,11 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
       case "empty":
       unset($_SESSION["cart_item"]);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 =======
 >>>>>>> 27bff1281bed071dc823835e52727332be6c286c
       break;
@@ -119,6 +134,7 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
     </form>
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     <?php
 
@@ -187,6 +203,8 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
               $_SESSION['ilosc'] = $item['ilosc'];
               $_SESSION['cena'] = $item['cena'];
 =======
+=======
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
     <div id="shopping-cart">
       <div class="txt-heading">Shopping Cart <a id="btnEmpty" href="logged.php?action=empty">Empty Cart</a></div>
       <?php
@@ -223,6 +241,7 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
               <tr>
                 <td colspan="5" align=right><strong>Total:</strong> <?php echo $item_total."zł"; ?></td>
               </tr>
+<<<<<<< HEAD
 >>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 
               $item_total += ($item["cena"]*$item["ilosc"]);
@@ -237,6 +256,8 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
             </tr>
 
 
+=======
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 
 
           </tbody>
@@ -244,6 +265,7 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
         <input type='submit' name='zatwZakup' value='Kupuje'>
       </form>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
       <?php
     }
@@ -272,6 +294,8 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
 
     <?php
 =======
+=======
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 
             </tbody>
           </table>    
@@ -304,6 +328,9 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
       </div>
 
       <?php
+<<<<<<< HEAD
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
+=======
 >>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 /*      echo $user;
       echo $item["nazwa"];
@@ -317,6 +344,7 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
             echo "<form method='post'>";
             switch($_POST['zatwZakup']){
 
+<<<<<<< HEAD
 <<<<<<< HEAD
               case "Kupuje":{
                 $user= $_SESSION['uzytkownik'];
@@ -339,6 +367,16 @@ if((isset($_SESSION['loggedKlient'])) && ($_SESSION['loggedKlient']==true))
           }
 
 
+=======
+              case "Kupuje":
+
+              $adasdqwe132 = mysqli_query($link, "INSERT INTO zamowienia (produkt) VALUES ('$iNaz')") or die("blad zapytania");
+              unset($_SESSION["cart_item"]);
+
+              break;
+            }
+          }
+>>>>>>> 27bff1281bed071dc823835e52727332be6c286c
 =======
               case "Kupuje":
 
